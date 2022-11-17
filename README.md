@@ -1,1 +1,5 @@
-# AgeGenderRecognition
+# Gender and age recognition using convolutional neural networks
+## ACIT4620 Computational Intelligence: Theory and Applications Fall 2022 Assignment 2
+
+As a course project for ACIT 4620, we attempt to propose a deep learning framework to predict gender and age simultaneously from face images by utilizing convolutional neural networks. Feature extraction will play a great role in the project as it allows for transformation of  raw data into numerical features that can be processed while preserving the information in the original data set.
+It is one of the fundamental abilities for humans to recognise the age and gender of other human beings in their surroundings. Extending such capabilities to machines has great application potential in areas from security and business to scientific studies and the general advancement of AI technologies with specific use cases such as identity verification and biometrics collection, human-machine interface, surveillance, marketing, recommendation systems and many more.

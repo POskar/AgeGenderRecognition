@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import tensorflow as tf
 import collections
-import resnet
+from helper.reference_1 import resnet
 
 
 class Model(resnet.Model):

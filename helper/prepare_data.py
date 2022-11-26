@@ -1,5 +1,6 @@
 import numpy as np, pandas as pd, os
 from keras.utils import load_img
+from PIL import Image, ImageOps
 
 def prepare_data(choice):
     match choice:
@@ -47,22 +48,24 @@ def prepare_data(choice):
 
             x = []
             for image in df['image']:
-                    img = load_img(image, color_mode = "grayscale")
-                    img = img.resize((img_size, img_size), 3)
+                    # img = load_img(image, color_mode = "grayscale")
+                    img = load_img(image, grayscale=False)
+                    # img = img.resize((img_size, img_size), 3)
+                    img = img.resize((img_size, img_size), Image.ANTIALIAS)
                     img = np.array(img)
                     x.append(img)
 
             x = np.array(x)
-            x = x.reshape(len(x), img_size, img_size, 1)
+            x = x.reshape(len(x), img_size, img_size, 3)
             x = x/255.0
 
-            y_age = np.array(df['gender'])
             y_age = np.array(df['age'])
+            y_gender = np.array(df['gender'])
             if 'ethnicity' in df.columns:
                 y_ethnicity = np.array(df['ethnicity'])
             else:
                 y_ethnicity = np.empty(0)
-            return x, y_age, y_age, y_ethnicity, img_size
+            return x, y_age, y_gender, y_ethnicity, img_size
         case 3:
             directory = os.getcwd() + '//datasets//Fairface//val'
 
@@ -133,6 +136,6 @@ def prepare_data(choice):
             y_gender = np.array(y_gender)
             y_ethnicity = np.array(y_ethnicity)
 
-            return x, y_age, y_age, y_ethnicity, img_size
+            return x, y_age, y_gender, y_ethnicity, img_size
         case _:
             return 0,0,0,0,0

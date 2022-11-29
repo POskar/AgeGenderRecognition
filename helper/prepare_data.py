@@ -7,7 +7,7 @@ def prepare_data(choice):
         case 1:
             df = pd.read_csv(os.getcwd() + "//datasets//age_gender.csv")
 
-            # image size originally is 48
+            # image size originally is 48 which is barely usable anywhere and cannot be reshaped due to images already coming in form of a pixel array
             img_size = 48
 
             # First split each pixel value and convert to float, only then we can normalize values of pixels from 0 - 255 to 0 - 1:
@@ -27,7 +27,7 @@ def prepare_data(choice):
             directory = os.getcwd() + '//datasets//UTKFace//'
 
             # image size originally is 200
-            img_size = 200
+            img_size = 224
             
             # lists for storing labels
             image_paths = []
@@ -48,15 +48,13 @@ def prepare_data(choice):
 
             x = []
             for image in df['image']:
-                    # img = load_img(image, color_mode = "grayscale")
-                    img = load_img(image, grayscale=False)
-                    # img = img.resize((img_size, img_size), 3)
-                    img = img.resize((img_size, img_size), Image.ANTIALIAS)
-                    img = np.array(img)
-                    x.append(img)
+                img = load_img(image, color_mode = "grayscale")
+                img = img.resize((img_size, img_size), 3)
+                img = np.array(img)
+                x.append(img)
 
             x = np.array(x)
-            x = x.reshape(len(x), img_size, img_size, 3)
+            x = x.reshape(len(x), img_size, img_size, 1)
             x = x/255.0
 
             y_age = np.array(df['age'])
@@ -70,19 +68,20 @@ def prepare_data(choice):
             directory = os.getcwd() + '//datasets//Fairface//val'
 
             # image size originally is 224
-            img_size = 224
+            img_size = 200
             
             x = []
 
             for filename in os.listdir(directory):
                 image_path = os.path.join(directory, filename)
-                img = load_img(image_path, color_mode = "grayscale")
+                # img = load_img(image_path, color_mode = "grayscale")
+                img = load_img(image_path, grayscale = False)
                 img = img.resize((img_size, img_size), 3)
                 img = np.array(img)
                 x.append(img)
 
             x = np.array(x)
-            x = x.reshape(len(x), img_size, img_size, 1)
+            x = x.reshape(len(x), img_size, img_size, 3)
             x = x/255.0
 
             df = pd.read_csv(os.getcwd() + "//datasets//Fairface//fairface_label_val.csv")

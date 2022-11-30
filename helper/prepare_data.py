@@ -2,7 +2,7 @@ import numpy as np, pandas as pd, os
 from keras.utils import load_img
 from PIL import Image, ImageOps
 
-def prepare_data(choice):
+def prepare_data(choice, colour = False):
     match choice:
         case 1:
             df = pd.read_csv(os.getcwd() + "//datasets//age_gender.csv")
@@ -27,7 +27,7 @@ def prepare_data(choice):
             directory = os.getcwd() + '//datasets//UTKFace//'
 
             # image size originally is 200
-            img_size = 224
+            img_size = 200
             
             # lists for storing labels
             image_paths = []
@@ -48,13 +48,19 @@ def prepare_data(choice):
 
             x = []
             for image in df['image']:
-                img = load_img(image, color_mode = "grayscale")
+                if colour:
+                    img = load_img(image, grayscale = False)
+                else:
+                    img = load_img(image, color_mode = "grayscale")
                 img = img.resize((img_size, img_size), 3)
                 img = np.array(img)
                 x.append(img)
 
             x = np.array(x)
-            x = x.reshape(len(x), img_size, img_size, 1)
+            if colour:
+                x = x.reshape(len(x), img_size, img_size, 3)
+            else:
+                x = x.reshape(len(x), img_size, img_size, 1)
             x = x/255.0
 
             y_age = np.array(df['age'])
@@ -68,20 +74,20 @@ def prepare_data(choice):
             directory = os.getcwd() + '//datasets//Fairface//val'
 
             # image size originally is 224
-            img_size = 200
+            img_size = 224
             
             x = []
 
             for filename in os.listdir(directory):
                 image_path = os.path.join(directory, filename)
-                # img = load_img(image_path, color_mode = "grayscale")
-                img = load_img(image_path, grayscale = False)
+                img = load_img(image_path, color_mode = "grayscale")
+                # img = load_img(image_path, grayscale = False)
                 img = img.resize((img_size, img_size), 3)
                 img = np.array(img)
                 x.append(img)
 
             x = np.array(x)
-            x = x.reshape(len(x), img_size, img_size, 3)
+            x = x.reshape(len(x), img_size, img_size, 1)
             x = x/255.0
 
             df = pd.read_csv(os.getcwd() + "//datasets//Fairface//fairface_label_val.csv")

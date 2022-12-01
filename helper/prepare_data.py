@@ -35,11 +35,11 @@ def prepare_data(choice, colour = False):
             gender_labels = []
 
             for filename in os.listdir(directory):
-                image_path = os.path.join(directory, filename)
+                image = os.path.join(directory, filename)
                 temp = filename.split('_')
                 age = int(temp[0])
                 gender = int(temp[1])
-                image_paths.append(image_path)
+                image_paths.append(image)
                 age_labels.append(age)
                 gender_labels.append(gender)
 
@@ -79,15 +79,20 @@ def prepare_data(choice, colour = False):
             x = []
 
             for filename in os.listdir(directory):
-                image_path = os.path.join(directory, filename)
-                img = load_img(image_path, color_mode = "grayscale")
-                # img = load_img(image_path, grayscale = False)
+                image = os.path.join(directory, filename)
+                if colour:
+                    img = load_img(image, grayscale = False)
+                else:
+                    img = load_img(image, color_mode = "grayscale")
                 img = img.resize((img_size, img_size), 3)
                 img = np.array(img)
                 x.append(img)
 
             x = np.array(x)
-            x = x.reshape(len(x), img_size, img_size, 1)
+            if colour:
+                x = x.reshape(len(x), img_size, img_size, 3)
+            else:
+                x = x.reshape(len(x), img_size, img_size, 1)
             x = x/255.0
 
             df = pd.read_csv(os.getcwd() + "//datasets//Fairface//fairface_label_val.csv")
